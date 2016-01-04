@@ -13,8 +13,12 @@
 #ifndef SQUAREVOICE_H_INCLUDED
 #define SQUAREVOICE_H_INCLUDED
 
-#include "ADSRenv.h"
+
+#include "dspTools.h"
+#include "LookUpTables.h"
+#include "filter1.h"
 #include "oscSQU.h"
+#include "ADSRenv.h"
 
 
 //==============================================================================
@@ -43,8 +47,8 @@ public:
         square.setSampleRate(samplingRate);
         AMPenv.setSampleRate(samplingRate);
         EG2.setSampleRate(samplingRate);
-        
-        
+        FILT1.setSamplingRate(samplingRate);
+
         
     }
     
@@ -77,32 +81,45 @@ public:
     void controllerMoved (int controllerNumber, int newValue) override
     {
         const int _CC_ = controllerNumber;
-        const double _CV_ = (double)(newValue / 127.);
+        const int _CV_ = newValue;
         
         switch ( _CC_ ){
+                
+                // Envelopes
             case 100 :
-                AMPenv.setAttack(_CV_);
+                AMPenv.setAttack((double)( _CV_ /127. ));
                 break;
             case 101 :
-                AMPenv.setDecay(_CV_);
+                AMPenv.setDecay((double)( _CV_ /127. ));
                 break;
             case 102 :
-                AMPenv.setSustain(_CV_);
+                AMPenv.setSustain((double)( _CV_ /127.));
                 break;
             case 103 :
-                AMPenv.setRelease(_CV_);
+                AMPenv.setRelease((double)( _CV_ /127.));
                 break;
             case 104 :
-                EG2.setAttack(_CV_);
+                EG2.setAttack((double)( _CV_ /127. ));
                 break;
             case 105 :
-                EG2.setDecay(_CV_);
+                EG2.setDecay((double)( _CV_/127. ));
                 break;
             case 106 :
-                EG2.setSustain(_CV_);
+                EG2.setSustain((double)( _CV_/127. ));
                 break;
             case 107 :
-                EG2.setRelease(_CV_);
+                EG2.setRelease((double)( _CV_/127. ));
+                break;
+                
+                // Filter
+            case 90 :
+                FILT1.setPlay((bool) _CV_ );
+                break;
+            case 91 :
+                FILT1.setFrequency((double) ( _CV_ / 127. ));
+                break;
+            case 92 :
+                FILT1.setResonance((double) ( _CV_ / 127. ));
                 break;
                 
             default :
@@ -118,7 +135,15 @@ public:
             {
                 
                 // const FloatType currentSample = static_cast<FloatType> (std::sin (currentAngle) * level * tailOff);
-                const float currentSample = (float) (square.getSignal() * level * AMPenv.getCurve());
+                const float currentSample = (float) (
+                                                     FILT1.getAudioOut
+                                                     (
+                                                     square.getSignal()
+                                                     )
+                                                     *
+                                                     level
+                                                     *
+                                                     AMPenv.getCurve());
                 
                 for (int i = outputBuffer.getNumChannels(); --i >= 0;)
                     outputBuffer.addSample (i, startSample, currentSample);
@@ -143,6 +168,7 @@ private:
     double level, samplingRate;
     oscSQU square;
     ADSRenv AMPenv, EG2;
+    filter1 FILT1;
 
 };
     

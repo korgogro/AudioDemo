@@ -6,15 +6,15 @@
               companyEmail="info@nonlinearinstruments.com">
   <MAINGROUP id="bWlEIg" name="AudioDemo">
     <GROUP id="{2597D3CD-3356-D9CC-8F9C-37033002CD6F}" name="Source">
-      <FILE id="Rr5jOM" name="ADSRenv.cpp" compile="1" resource="0" file="Source/ADSRenv.cpp"/>
       <FILE id="BJRv7e" name="ADSRenv.h" compile="0" resource="0" file="Source/ADSRenv.h"/>
+      <FILE id="D4JkXk" name="dspTools.h" compile="0" resource="0" file="Source/dspTools.h"/>
+      <FILE id="XieIsS" name="filter1.h" compile="0" resource="0" file="Source/filter1.h"/>
+      <FILE id="V1aWZq" name="LookUpTables.h" compile="0" resource="0" file="Source/LookUpTables.h"/>
       <FILE id="AwVFJl" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="ctHf0o" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
       <FILE id="AB5Z5R" name="Oscilloscope.h" compile="0" resource="0" file="Source/Oscilloscope.h"/>
-      <FILE id="lAMiSF" name="oscSQU.cpp" compile="1" resource="0" file="Source/oscSQU.cpp"/>
       <FILE id="jsK4bL" name="oscSQU.h" compile="0" resource="0" file="Source/oscSQU.h"/>
       <FILE id="YT3Skr" name="SquareVoice.h" compile="0" resource="0" file="Source/SquareVoice.h"/>
-      <FILE id="tQBSEo" name="Synth.h" compile="0" resource="0" file="Source/Synth.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

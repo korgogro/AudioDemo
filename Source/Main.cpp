@@ -17,10 +17,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include <array>
 
-struct AudioDemoClasses
-{
-#include "oscSQU.h"
-#include "ADSRenv.h"
+struct AudioDemoClasses {
 #include "SquareVoice.h"
 #include "Oscilloscope.h"
 #include "MainComponent.h"

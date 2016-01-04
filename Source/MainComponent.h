@@ -52,6 +52,7 @@ public:
         addAndMakeVisible (midiKeyboardComponent);
         
         addAndMakeVisible (onOffButton);
+       //LookAndFeel::setDefaultLookAndFeel ();
         onOffButton.setClickingTogglesState(true);
         onOffButton.setToggleState(true, dontSendNotification);
         masterPower=true; // should we initialize the bool here ¿?
@@ -74,7 +75,7 @@ public:
         AMPenvA.setSliderStyle(juce::Slider::LinearBarVertical);
         AMPenvA.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
         AMPenvA.setRange (0., 127.0);
-        AMPenvA.setSkewFactorFromMidPoint (0.32);
+        AMPenvA.setSkewFactorFromMidPoint (32.);
         AMPenvA.setValue (10., dontSendNotification);
         AMPenvA.addListener (this);
         
@@ -83,7 +84,7 @@ public:
         AMPenvD.setSliderStyle(juce::Slider::LinearBarVertical);
         AMPenvD.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
         AMPenvD.setRange (0., 127.0);
-        AMPenvD.setSkewFactorFromMidPoint (0.32);
+        AMPenvD.setSkewFactorFromMidPoint (32.);
         AMPenvD.setValue (10., dontSendNotification);
         AMPenvD.addListener (this);
         
@@ -91,7 +92,7 @@ public:
         AMPenvS.setSliderStyle(juce::Slider::LinearBarVertical);
         AMPenvS.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
         AMPenvS.setRange (0., 127.0);
-        AMPenvS.setSkewFactorFromMidPoint (0.32);
+        AMPenvS.setSkewFactorFromMidPoint (32.);
         AMPenvS.setValue (80., dontSendNotification);
         AMPenvS.addListener (this);
         
@@ -99,7 +100,7 @@ public:
         AMPenvR.setSliderStyle(juce::Slider::LinearBarVertical);
         AMPenvR.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
         AMPenvR.setRange (0., 127.0);
-        AMPenvR.setSkewFactorFromMidPoint (0.32);
+        AMPenvR.setSkewFactorFromMidPoint (32.);
         AMPenvR.setValue (20., dontSendNotification);
         AMPenvR.addListener (this);
         
@@ -109,7 +110,7 @@ public:
         EG2envA.setSliderStyle(juce::Slider::LinearBarVertical);
         EG2envA.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
         EG2envA.setRange (0., 127.0);
-        EG2envA.setSkewFactorFromMidPoint (0.32);
+        EG2envA.setSkewFactorFromMidPoint (32.);
         EG2envA.setValue (10., dontSendNotification);
         EG2envA.addListener (this);
         
@@ -117,7 +118,7 @@ public:
         EG2envD.setSliderStyle(juce::Slider::LinearBarVertical);
         EG2envD.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
         EG2envD.setRange (0., 127.0);
-        EG2envD.setSkewFactorFromMidPoint (0.32);
+        EG2envD.setSkewFactorFromMidPoint (32.);
         EG2envD.setValue (10., dontSendNotification);
         EG2envD.addListener (this);
         
@@ -125,7 +126,7 @@ public:
         EG2envS.setSliderStyle(juce::Slider::LinearBarVertical);
         EG2envS.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
         EG2envS.setRange (0., 127.0);
-        EG2envS.setSkewFactorFromMidPoint (0.32);
+        EG2envS.setSkewFactorFromMidPoint (32.);
         EG2envS.setValue (80., dontSendNotification);
         EG2envS.addListener (this);
         
@@ -133,10 +134,37 @@ public:
         EG2envR.setSliderStyle(juce::Slider::LinearBarVertical);
         EG2envR.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
         EG2envR.setRange (0., 127.0);
-        EG2envR.setSkewFactorFromMidPoint (0.32);
+        EG2envR.setSkewFactorFromMidPoint (32.);
         EG2envR.setValue (20., dontSendNotification);
         EG2envR.addListener (this);
+        
+        
+        // FILT 1 ================================================= //
 
+        addAndMakeVisible (FILT1onOff);
+        FILT1onOff.setClickingTogglesState(true);
+        FILT1onOff.setToggleState(true, dontSendNotification);
+        FILT1engage=true; // should we initialize the bool here ¿?
+        FILT1onOff.setButtonText ("ENGAGED");
+        FILT1onOff.addListener(this);
+        //FILT1onOff.addShortcut(KeyPress(juce::KeyPress::spaceKey));
+        
+        addAndMakeVisible (Cutoff);
+        Cutoff.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+        Cutoff.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
+        Cutoff.setRange (0., 127.0);
+        Cutoff.setSkewFactorFromMidPoint (90.);
+        Cutoff.setValue (10., dontSendNotification);
+        Cutoff.addListener (this);
+        
+        addAndMakeVisible (Resonance);
+        Resonance.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+        Resonance.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
+        Resonance.setRange (0., 127.0);
+        Resonance.setSkewFactorFromMidPoint (32.);
+        Resonance.setValue (10., dontSendNotification);
+        Resonance.addListener (this);
+        
         
         setSize (800, 600);
     }
@@ -151,7 +179,7 @@ public:
     //==========================================================================
     void resized() override
     {
-        const int margin = 10;
+        const int margin = 11;
         Rectangle<int> r = getLocalBounds();
         midiKeyboardComponent.setBounds (r.removeFromBottom (8*margin));
         oscilloscope.setBounds (r.removeFromBottom(2*margin));
@@ -164,27 +192,33 @@ public:
         AMPenvS.setBounds(16 * margin, 4 * margin, 3 * margin, 10 * margin);
         AMPenvR.setBounds(19 * margin, 4 * margin, 3 * margin, 10 * margin);
         
-        EG2envA.setBounds(23 * margin, 4 * margin, 3 * margin, 10 * margin);
-        EG2envD.setBounds(26 * margin, 4 * margin, 3 * margin, 10 * margin);
-        EG2envS.setBounds(29 * margin, 4 * margin, 3 * margin, 10 * margin);
-        EG2envR.setBounds(32 * margin, 4 * margin, 3 * margin, 10 * margin);
+        EG2envA.setBounds(24 * margin, 4 * margin, 3 * margin, 10 * margin);
+        EG2envD.setBounds(27 * margin, 4 * margin, 3 * margin, 10 * margin);
+        EG2envS.setBounds(30 * margin, 4 * margin, 3 * margin, 10 * margin);
+        EG2envR.setBounds(33 * margin, 4 * margin, 3 * margin, 10 * margin);
+        
+        FILT1onOff.setBounds(50 * margin, 1 * margin, 7 * margin, (int)(2.5 * margin));
+        Cutoff.setBounds(41 * margin, 5 * margin , 5 * margin, 5 * margin);
+        Resonance.setBounds(47 * margin, 5 * margin , 5 * margin, 5 * margin);
     }
     
     void paint (Graphics& g){
     
-        const int gmargin = 10;
+        const int gmargin = 11;
         g.fillAll (Colours::white);
         
         g.setColour(juce::Colours::teal);
         g.fillRect(0, 0, getWidth(), getHeight());
         g.setColour(juce::Colours::white);
-        g.setFont(Font("OpenDyslexic", 18.0f, normal));
+        g.setFont(Font("OpenDyslexic", 20.0f, normal));
         
         g.drawText("VOLUME", (int)(1.5 * gmargin), 9 * gmargin, 5 * gmargin , (int)(2.5 * gmargin), true);
         
-        g.drawText("AMP EG", 15 * gmargin, 1  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+        g.drawText("AMP EG", 10 * gmargin, 1  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
         
-        g.drawText("EG 2", 28 * gmargin, 1  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+        g.drawText("EG 2", 24 * gmargin, 1  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+        
+        g.drawText("FILTER", 42 * gmargin, 1  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
        
         g.drawText("A",      11 * gmargin, 14 * gmargin, 3 * gmargin, (int)(2.5 * gmargin),true);
         g.drawText("D",      14 * gmargin, 14 * gmargin, 3 * gmargin, (int)(2.5 * gmargin),true);
@@ -195,6 +229,9 @@ public:
         g.drawText("D",      27 * gmargin, 14 * gmargin, 3 * gmargin, (int)(2.5 * gmargin),true);
         g.drawText("S",      30 * gmargin, 14 * gmargin, 3 * gmargin, (int)(2.5 * gmargin),true);
         g.drawText("R",      33 * gmargin, 14 * gmargin, 3 * gmargin, (int)(2.5 * gmargin),true);
+        
+         g.drawText("CUTOFF",42 * gmargin, 10  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+         g.drawText("RES",   49 * gmargin, 10  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
     }
 
     //==========================================================================
@@ -247,6 +284,16 @@ public:
             if(masterPower){onOffButton.setButtonText ("ON"); }
             else{ onOffButton.setButtonText ("OFF");}
         }
+        else if (buttonThatWasClicked == &FILT1onOff)
+        {
+            FILT1engage =static_cast<bool>(buttonThatWasClicked->getToggleState());
+            if(FILT1engage){FILT1onOff.setButtonText ("ENGAGED"); }
+            else{ FILT1onOff.setButtonText ("BYPASS");}
+            for (int i = 0; i < maxNumVoices; ++i)
+            {
+                synth.getVoice(i)->controllerMoved(90, (int) ( FILT1engage ) );
+            }
+        }
         
     }
     
@@ -284,6 +331,20 @@ public:
                 synth.getVoice(i)->controllerMoved(103, (int) AMPenvR.getValue());
             }
         }
+        else if  (slider == &Cutoff)
+        {
+            for (int i = 0; i < maxNumVoices; ++i)
+            {
+                synth.getVoice(i)->controllerMoved(91, (int) Cutoff.getValue());
+            }
+        }
+        else if  (slider == &Resonance)
+        {
+            for (int i = 0; i < maxNumVoices; ++i)
+            {
+                synth.getVoice(i)->controllerMoved(92, (int) Resonance.getValue());
+            }
+        }
     }
     
     
@@ -297,8 +358,8 @@ private:
     MidiKeyboardComponent midiKeyboardComponent;
     const int maxNumVoices = 16;
     
-    TextButton onOffButton;
-    bool masterPower;
+    TextButton onOffButton, FILT1onOff ;
+    bool masterPower, FILT1engage;
     Slider
     masterVolume,
     AMPenvA,
@@ -308,7 +369,9 @@ private:
     EG2envA,
     EG2envD,
     EG2envS,
-    EG2envR
+    EG2envR,
+    Cutoff,
+    Resonance
     ;
     double masterVolumeFactor;
     
