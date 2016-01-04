@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="iM4BID" name="AudioDemo" projectType="guiapp" version="1.0.0"
+              bundleIdentifier="com.nonlinearinstruments.AudioDemo" includeBinaryInAppConfig="1"
+              jucerVersion="4.1.0" companyName="Nonlinear Instruments" companyWebsite="www.NonLinearInstruments.com"
+              companyEmail="info@nonlinearinstruments.com">
+  <MAINGROUP id="bWlEIg" name="AudioDemo">
+    <GROUP id="{2597D3CD-3356-D9CC-8F9C-37033002CD6F}" name="Source">
+      <FILE id="Rr5jOM" name="ADSRenv.cpp" compile="1" resource="0" file="Source/ADSRenv.cpp"/>
+      <FILE id="BJRv7e" name="ADSRenv.h" compile="0" resource="0" file="Source/ADSRenv.h"/>
+      <FILE id="AwVFJl" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="ctHf0o" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
+      <FILE id="AB5Z5R" name="Oscilloscope.h" compile="0" resource="0" file="Source/Oscilloscope.h"/>
+      <FILE id="lAMiSF" name="oscSQU.cpp" compile="1" resource="0" file="Source/oscSQU.cpp"/>
+      <FILE id="jsK4bL" name="oscSQU.h" compile="0" resource="0" file="Source/oscSQU.h"/>
+      <FILE id="YT3Skr" name="SquareVoice.h" compile="0" resource="0" file="Source/SquareVoice.h"/>
+      <FILE id="tQBSEo" name="Synth.h" compile="0" resource="0" file="Source/Synth.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+                       isDebug="1" optimisation="1" targetName="ProjucerDemo"/>
+        <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+                       isDebug="0" optimisation="3" targetName="ProjucerDemo"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../juce-grapefruit-osx/modules"/>
+        <MODULEPATH id="juce_events" path="../../juce-grapefruit-osx/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../juce-grapefruit-osx/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../juce-grapefruit-osx/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../juce-grapefruit-osx/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../juce-grapefruit-osx/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../juce-grapefruit-osx/modules"/>
+        <MODULEPATH id="juce_video" path="../../juce-grapefruit-osx/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../juce-grapefruit-osx/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../juce-grapefruit-osx/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../juce-grapefruit-osx/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../juce-grapefruit-osx/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../juce-grapefruit-osx/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../juce-grapefruit-osx/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_video" showAllCode="1" useLocalCopy="0"/>
+  </MODULES>
+  <JUCEOPTIONS/>
+  <LIVE_SETTINGS>
+    <OSX enableCxx11="1"/>
+  </LIVE_SETTINGS>
+</JUCERPROJECT>
