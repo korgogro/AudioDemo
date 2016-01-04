@@ -18,14 +18,13 @@ class filter1 {
 public :
 
     filter1(){
-        
+        declick.setSamplingRate(samplingRate);
         declick.setAttack(DECLICK_LONG);
         declick.setRelease(DECLICK_LONG);
         declick.trigger_on();
         samplingRate = 44100.;
         cutoffModSignal = 0.;
         cutoffModDepth = 0.;
-        declick.setSamplingRate(samplingRate);
         freq_max=samplingRate/6.;
         freq_min=40.;
         ln_freq_max=log(freq_max);

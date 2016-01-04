@@ -145,7 +145,7 @@ public:
         FILT1onOff.setClickingTogglesState(true);
         FILT1onOff.setToggleState(true, dontSendNotification);
         FILT1engage=true; // should we initialize the bool here ¿?
-        FILT1onOff.setButtonText ("ENGAGED");
+        FILT1onOff.setButtonText ("O");
         FILT1onOff.addListener(this);
         //FILT1onOff.addShortcut(KeyPress(juce::KeyPress::spaceKey));
         
@@ -164,6 +164,14 @@ public:
         Resonance.setSkewFactorFromMidPoint (32.);
         Resonance.setValue (10., dontSendNotification);
         Resonance.addListener (this);
+        
+        addAndMakeVisible (EGfilt);
+        EGfilt.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+        EGfilt.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
+        EGfilt.setRange (0., 127.0);
+        EGfilt.setSkewFactorFromMidPoint (64.);
+        EGfilt.setValue (0., dontSendNotification);
+        EGfilt.addListener (this);
         
         
         setSize (800, 600);
@@ -197,9 +205,10 @@ public:
         EG2envS.setBounds(30 * margin, 4 * margin, 3 * margin, 10 * margin);
         EG2envR.setBounds(33 * margin, 4 * margin, 3 * margin, 10 * margin);
         
-        FILT1onOff.setBounds(50 * margin, 1 * margin, 7 * margin, (int)(2.5 * margin));
+        FILT1onOff.setBounds(40 * margin, 1 * margin, 2.5 * margin, (int)(2.5 * margin));
         Cutoff.setBounds(41 * margin, 5 * margin , 5 * margin, 5 * margin);
         Resonance.setBounds(47 * margin, 5 * margin , 5 * margin, 5 * margin);
+        EGfilt.setBounds(52 * margin, 5 * margin , 5 * margin, 5 * margin);
     }
     
     void paint (Graphics& g){
@@ -218,7 +227,7 @@ public:
         
         g.drawText("EG 2", 24 * gmargin, 1  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
         
-        g.drawText("FILTER", 42 * gmargin, 1  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+        g.drawText("FILTER", 44 * gmargin, 1  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
        
         g.drawText("A",      11 * gmargin, 14 * gmargin, 3 * gmargin, (int)(2.5 * gmargin),true);
         g.drawText("D",      14 * gmargin, 14 * gmargin, 3 * gmargin, (int)(2.5 * gmargin),true);
@@ -231,7 +240,9 @@ public:
         g.drawText("R",      33 * gmargin, 14 * gmargin, 3 * gmargin, (int)(2.5 * gmargin),true);
         
          g.drawText("CUTOFF",42 * gmargin, 10  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
-         g.drawText("RES",   49 * gmargin, 10  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+         g.drawText("RES",   48 * gmargin, 10  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+        
+        g.drawText("EG->cutoff",   53 * gmargin, 10  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
     }
 
     //==========================================================================
@@ -287,8 +298,8 @@ public:
         else if (buttonThatWasClicked == &FILT1onOff)
         {
             FILT1engage =static_cast<bool>(buttonThatWasClicked->getToggleState());
-            if(FILT1engage){FILT1onOff.setButtonText ("ENGAGED"); }
-            else{ FILT1onOff.setButtonText ("BYPASS");}
+            if(FILT1engage){FILT1onOff.setButtonText ("O"); }
+            else{ FILT1onOff.setButtonText ("|");}
             for (int i = 0; i < maxNumVoices; ++i)
             {
                 synth.getVoice(i)->controllerMoved(90, (int) ( FILT1engage ) );
@@ -345,6 +356,13 @@ public:
                 synth.getVoice(i)->controllerMoved(92, (int) Resonance.getValue());
             }
         }
+        else if  (slider == &EGfilt)
+        {
+            for (int i = 0; i < maxNumVoices; ++i)
+            {
+                synth.getVoice(i)->controllerMoved(93, (int) EGfilt.getValue());
+            }
+        }
     }
     
     
@@ -371,7 +389,8 @@ private:
     EG2envS,
     EG2envR,
     Cutoff,
-    Resonance
+    Resonance,
+    EGfilt
     ;
     double masterVolumeFactor;
     

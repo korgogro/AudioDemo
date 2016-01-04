@@ -48,8 +48,6 @@ public:
         AMPenv.setSampleRate(samplingRate);
         EG2.setSampleRate(samplingRate);
         FILT1.setSamplingRate(samplingRate);
-
-        
     }
     
     bool canPlaySound (SynthesiserSound* sound) override
@@ -87,28 +85,28 @@ public:
                 
                 // Envelopes
             case 100 :
-                AMPenv.setAttack((double)( _CV_ /127. ));
+                AMPenv.setAttack((double)( _CV_ / 127. ));
                 break;
             case 101 :
-                AMPenv.setDecay((double)( _CV_ /127. ));
+                AMPenv.setDecay((double)( _CV_ / 127. ));
                 break;
             case 102 :
-                AMPenv.setSustain((double)( _CV_ /127.));
+                AMPenv.setSustain((double)( _CV_ / 127.));
                 break;
             case 103 :
-                AMPenv.setRelease((double)( _CV_ /127.));
+                AMPenv.setRelease((double)( _CV_ / 127.));
                 break;
             case 104 :
-                EG2.setAttack((double)( _CV_ /127. ));
+                EG2.setAttack((double)( _CV_ / 127. ));
                 break;
             case 105 :
-                EG2.setDecay((double)( _CV_/127. ));
+                EG2.setDecay((double)( _CV_ / 127. ));
                 break;
             case 106 :
-                EG2.setSustain((double)( _CV_/127. ));
+                EG2.setSustain((double)( _CV_ / 127. ));
                 break;
             case 107 :
-                EG2.setRelease((double)( _CV_/127. ));
+                EG2.setRelease((double)( _CV_ / 127. ));
                 break;
                 
                 // Filter
@@ -120,6 +118,9 @@ public:
                 break;
             case 92 :
                 FILT1.setResonance((double) ( _CV_ / 127. ));
+                break;
+            case 93 :
+                FILT1.setCutoffModDepth((double) ( _CV_ / 127. ));
                 break;
                 
             default :
@@ -133,6 +134,7 @@ public:
         {
             while (--numSamples >= 0)
             {
+                FILT1.patchCutoffModSignal(EG2.getCurve());
                 
                 // const FloatType currentSample = static_cast<FloatType> (std::sin (currentAngle) * level * tailOff);
                 const float currentSample = (float) (
@@ -143,7 +145,8 @@ public:
                                                      *
                                                      level
                                                      *
-                                                     AMPenv.getCurve());
+                                                     AMPenv.getCurve()
+                                                     );
                 
                 for (int i = outputBuffer.getNumChannels(); --i >= 0;)
                     outputBuffer.addSample (i, startSample, currentSample);
