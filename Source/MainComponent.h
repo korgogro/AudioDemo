@@ -56,7 +56,7 @@ public:
         onOffButton.setClickingTogglesState(true);
         onOffButton.setToggleState(true, dontSendNotification);
         masterPower=true; // should we initialize the bool here ¿?
-        onOffButton.setButtonText ("ON");
+        onOffButton.setButtonText ("O");
         onOffButton.addListener(this);
         onOffButton.addShortcut(KeyPress(juce::KeyPress::spaceKey));
         
@@ -187,13 +187,13 @@ public:
     //==========================================================================
     void resized() override
     {
-        const int margin = 11;
+        const int margin = 10;
         Rectangle<int> r = getLocalBounds();
         midiKeyboardComponent.setBounds (r.removeFromBottom (8*margin));
         oscilloscope.setBounds (r.removeFromBottom(2*margin));
         
-        onOffButton.setBounds (margin,     margin, 5 * margin, (int)(2.5 * margin));
-        masterVolume.setBounds(margin, 4 * margin, 5 * margin,         5  * margin);
+        onOffButton.setBounds (2 * margin , 4 * margin  , (int)(2.5 * margin), (int)(2.5 * margin));
+        masterVolume.setBounds(    margin , 8 * margin  , 5 * margin         ,         5  * margin);
         
         AMPenvA.setBounds(10 * margin, 4 * margin, 3 * margin, 10 * margin);
         AMPenvD.setBounds(13 * margin, 4 * margin, 3 * margin, 10 * margin);
@@ -205,15 +205,15 @@ public:
         EG2envS.setBounds(30 * margin, 4 * margin, 3 * margin, 10 * margin);
         EG2envR.setBounds(33 * margin, 4 * margin, 3 * margin, 10 * margin);
         
-        FILT1onOff.setBounds(40 * margin, 1 * margin, 2.5 * margin, (int)(2.5 * margin));
-        Cutoff.setBounds(41 * margin, 5 * margin , 5 * margin, 5 * margin);
-        Resonance.setBounds(47 * margin, 5 * margin , 5 * margin, 5 * margin);
-        EGfilt.setBounds(52 * margin, 5 * margin , 5 * margin, 5 * margin);
+        FILT1onOff.setBounds(40 * margin, (int)(1.5  * margin), 2.5 * margin, (int)(2.5 * margin));
+        Cutoff.setBounds    (40 * margin,          7 * margin , 7 * margin,            7 * margin);
+        Resonance.setBounds (48 * margin,          7 * margin , 7 * margin,            7 * margin);
+        EGfilt.setBounds    (56 * margin,          7 * margin , 7 * margin,            7 * margin);
     }
     
     void paint (Graphics& g){
     
-        const int gmargin = 11;
+        const int gmargin = 10;
         g.fillAll (Colours::white);
         
         g.setColour(juce::Colours::teal);
@@ -221,7 +221,9 @@ public:
         g.setColour(juce::Colours::white);
         g.setFont(Font("OpenDyslexic", 20.0f, normal));
         
-        g.drawText("VOLUME", (int)(1.5 * gmargin), 9 * gmargin, 5 * gmargin , (int)(2.5 * gmargin), true);
+        g.drawText("Master", (int)(1.5 * gmargin),  gmargin, 5 * gmargin , (int)(2.5 * gmargin), true);
+        
+        g.drawText("VOLUME", (int)(1.5 * gmargin), 14 * gmargin, 5 * gmargin , (int)(2.5 * gmargin), true);
         
         g.drawText("AMP EG", 10 * gmargin, 1  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
         
@@ -239,10 +241,9 @@ public:
         g.drawText("S",      30 * gmargin, 14 * gmargin, 3 * gmargin, (int)(2.5 * gmargin),true);
         g.drawText("R",      33 * gmargin, 14 * gmargin, 3 * gmargin, (int)(2.5 * gmargin),true);
         
-         g.drawText("CUTOFF",42 * gmargin, 10  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
-         g.drawText("RES",   48 * gmargin, 10  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
-        
-        g.drawText("EG->cutoff",   53 * gmargin, 10  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+         g.drawText("CUTOFF",41 * gmargin, 14  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+         g.drawText("RES",   51 * gmargin, 14  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+         g.drawText("EG->cutoff",   57 * gmargin, 14  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
     }
 
     //==========================================================================
@@ -292,8 +293,8 @@ public:
         if (buttonThatWasClicked == &onOffButton)                                                      // [3]
         {
             masterPower = static_cast<bool>(buttonThatWasClicked->getToggleState());
-            if(masterPower){onOffButton.setButtonText ("ON"); }
-            else{ onOffButton.setButtonText ("OFF");}
+            if(masterPower){onOffButton.setButtonText ("O"); }
+            else{ onOffButton.setButtonText ("|");}
         }
         else if (buttonThatWasClicked == &FILT1onOff)
         {

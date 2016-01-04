@@ -134,7 +134,7 @@ public:
         {
             while (--numSamples >= 0)
             {
-                FILT1.patchCutoffModSignal(EG2.getCurve());
+                FILT1.patchCutoffModSignal(  ( 2. * EG2.getCurve() ) - 1. );
                 
                 // const FloatType currentSample = static_cast<FloatType> (std::sin (currentAngle) * level * tailOff);
                 const float currentSample = (float) (
