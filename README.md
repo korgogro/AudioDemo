@@ -1,2 +1,2 @@
 # AudioDemo
-A JUCE synth
+... a JUCE Audio App using Synthesiser classes and custom DSP objects.
