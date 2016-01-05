@@ -24,7 +24,7 @@ public :
         declick.trigger_on();
         samplingRate = 44100.;
         cutoffModSignal = 0.;
-        cutoffModDepth = 0.;
+        cutoffModDepth = 1.;
         freq_max=samplingRate/6.;
         freq_min=40.;
         ln_freq_max=log(freq_max);

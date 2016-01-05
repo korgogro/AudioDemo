@@ -45,9 +45,12 @@ public:
     {
         samplingRate=getSampleRate();
         square.setSampleRate(samplingRate);
+        square2.setSampleRate(samplingRate);
         AMPenv.setSampleRate(samplingRate);
         EG2.setSampleRate(samplingRate);
         FILT1.setSamplingRate(samplingRate);
+        detuneOsc1 = detuneOsc2 = 1.;
+        XmodEngaged = false;
     }
     
     bool canPlaySound (SynthesiserSound* sound) override
@@ -60,7 +63,12 @@ public:
                     int currentPitchWheelPosition) override
     {
         level = velocity * 0.15;
-        square.setFrequency( MidiMessage::getMidiNoteInHertz (midiNoteNumber) );
+        
+        const double noteFreqHz = MidiMessage::getMidiNoteInHertz (midiNoteNumber);
+        const double note2FreqHz = MidiMessage::getMidiNoteInHertz(midiNoteNumber-1);
+        
+        square.setFrequency ( noteFreqHz + ( detuneOsc1 * ( noteFreqHz - note2FreqHz ) ));
+        square2.setFrequency( noteFreqHz + ( detuneOsc2 * ( noteFreqHz - note2FreqHz ) ));
         AMPenv.triggerOn();
         EG2.triggerOn();
     }
@@ -123,6 +131,13 @@ public:
                 FILT1.setCutoffModDepth((double) ( _CV_ / 127. ));
                 break;
                 
+                // OSC
+            case 80:
+                this->setDetune(_CV_);
+                break;
+            case 81:
+                this->setXmod((bool)( _CV_));
+                
             default :
                 break;
         }
@@ -134,19 +149,20 @@ public:
         {
             while (--numSamples >= 0)
             {
-                FILT1.patchCutoffModSignal(  ( 2. * EG2.getCurve() ) - 1. );
+                FILT1.patchCutoffModSignal(  EG2.getCurve() );
+                
+                double oscsOut = ( square.getSignal() + square2.getSignal() ) / 2.;
+                if(XmodEngaged){ oscsOut = ( square.getSignal() * square2.getSignal() ) / 2.; };
                 
                 // const FloatType currentSample = static_cast<FloatType> (std::sin (currentAngle) * level * tailOff);
                 const float currentSample = (float) (
-                                                     FILT1.getAudioOut
-                                                     (
-                                                     square.getSignal()
-                                                     )
-                                                     *
-                                                     level
-                                                     *
-                                                     AMPenv.getCurve()
-                                                     );
+                                                       FILT1.getAudioOut ( oscsOut )
+                                                              *
+                                                            level
+                                                              *
+                                                        AMPenv.getCurve()
+                                                     
+                                                        );
                 
                 for (int i = outputBuffer.getNumChannels(); --i >= 0;)
                     outputBuffer.addSample (i, startSample, currentSample);
@@ -164,12 +180,22 @@ public:
         
     }
     
+    void setDetune(int _detune){
+        detuneOsc1 = (double) ( _detune / 127. );
+        detuneOsc2 = detuneOsc1 * ( -1. );
+    }
+    
+    void setXmod ( bool _Xmod){
+        XmodEngaged = _Xmod;
+    }
+    
 
  
 private:
     
-    double level, samplingRate;
-    oscSQU square;
+    double level, samplingRate, detuneOsc1, detuneOsc2;
+    bool XmodEngaged;
+    oscSQU square, square2;
     ADSRenv AMPenv, EG2;
     filter1 FILT1;
 

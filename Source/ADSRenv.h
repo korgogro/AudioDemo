@@ -45,10 +45,12 @@ public:
     
     void setAttack(double _attack){
         attack = int ( _attack * sampleRate * max_env_attack);
+        if(attack<=0){ attack=1; }
     }
     
     void setDecay(double _decay){
         decay = int ( _decay * sampleRate * max_env_decay);
+        if(decay<=0){ decay=1; }
     }
     
     void setSustain(double _sustain){
@@ -57,6 +59,7 @@ public:
     
     void setRelease(double _release){
         release = int ( _release * sampleRate * max_env_decay);
+         if(release<=0){ release=1; }
     }
     
     void triggerOn(){

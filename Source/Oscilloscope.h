@@ -37,7 +37,7 @@ public:
     //==========================================================================
     void paint (Graphics& g) override
     {
-        g.fillAll (Colours::black);
+        //g.fillAll (Colours::white);
         Rectangle<int> r = getLocalBounds();
         Path path;
         path.startNewSubPath (0, 0.5 * r.getHeight());
@@ -62,7 +62,7 @@ public:
             ++paintPos;
         }
         
-        g.setColour (Colours::teal);
+        g.setColour (Colours::blueviolet);
         g.strokePath (path, PathStrokeType (2.0f));
     }
     

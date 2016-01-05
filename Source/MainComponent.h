@@ -65,7 +65,7 @@ public:
         masterVolume.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
         masterVolume.setRange (0., 1.0);
         masterVolume.setSkewFactorFromMidPoint (0.3);
-        masterVolume.setValue (1., dontSendNotification);
+        masterVolume.setValue (.7, dontSendNotification);
         masterVolumeFactor = 1.;
         masterVolume.addListener (this);
         
@@ -153,7 +153,7 @@ public:
         Cutoff.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
         Cutoff.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
         Cutoff.setRange (0., 127.0);
-        Cutoff.setSkewFactorFromMidPoint (90.);
+        Cutoff.setSkewFactorFromMidPoint (64.);
         Cutoff.setValue (10., dontSendNotification);
         Cutoff.addListener (this);
         
@@ -161,7 +161,7 @@ public:
         Resonance.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
         Resonance.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
         Resonance.setRange (0., 127.0);
-        Resonance.setSkewFactorFromMidPoint (32.);
+        Resonance.setSkewFactorFromMidPoint (64.);
         Resonance.setValue (10., dontSendNotification);
         Resonance.addListener (this);
         
@@ -169,12 +169,31 @@ public:
         EGfilt.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
         EGfilt.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
         EGfilt.setRange (0., 127.0);
-        EGfilt.setSkewFactorFromMidPoint (64.);
-        EGfilt.setValue (0., dontSendNotification);
+        EGfilt.setSkewFactorFromMidPoint (16.);
+        EGfilt.setValue (1., dontSendNotification);
         EGfilt.addListener (this);
         
+        // OSC ===================================================== //
         
-        setSize (800, 600);
+        addAndMakeVisible (CrossMod);
+        CrossMod.setClickingTogglesState(true);
+        CrossMod.setToggleState(false, dontSendNotification);
+        CrossMod.setButtonText ("O");
+        CrossMod.addListener(this);
+        CrossMod.addShortcut(KeyPress(juce::KeyPress::spaceKey));
+        
+        
+        addAndMakeVisible (Detune);
+        Detune.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+        Detune.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
+        Detune.setRange (0., 127.0);
+        Detune.setSkewFactorFromMidPoint (16.);
+        Detune.setValue (1., dontSendNotification);
+        Detune.addListener (this);
+        
+        
+        
+        setSize (750, 350);
     }
 
     //==========================================================================
@@ -187,49 +206,64 @@ public:
     //==========================================================================
     void resized() override
     {
-        const int margin = 10;
+        const int margin = 11;
         Rectangle<int> r = getLocalBounds();
         midiKeyboardComponent.setBounds (r.removeFromBottom (8*margin));
-        oscilloscope.setBounds (r.removeFromBottom(2*margin));
+        //oscilloscope.setBounds (r.removeFromBottom(2*margin));
         
         onOffButton.setBounds (2 * margin , 4 * margin  , (int)(2.5 * margin), (int)(2.5 * margin));
-        masterVolume.setBounds(    margin , 8 * margin  , 5 * margin         ,         5  * margin);
+        masterVolume.setBounds(1 * margin , 7 * margin  ,  5 * margin,        5  * margin);
+        oscilloscope.setBounds( margin    , 14 * margin  , 6 * margin,        6  * margin);
         
-        AMPenvA.setBounds(10 * margin, 4 * margin, 3 * margin, 10 * margin);
-        AMPenvD.setBounds(13 * margin, 4 * margin, 3 * margin, 10 * margin);
-        AMPenvS.setBounds(16 * margin, 4 * margin, 3 * margin, 10 * margin);
-        AMPenvR.setBounds(19 * margin, 4 * margin, 3 * margin, 10 * margin);
+        AMPenvA.setBounds(10 * margin, 10 * margin, 3 * margin, 10 * margin);
+        AMPenvD.setBounds(13 * margin, 10 * margin, 3 * margin, 10 * margin);
+        AMPenvS.setBounds(16 * margin, 10 * margin, 3 * margin, 10 * margin);
+        AMPenvR.setBounds(19 * margin, 10 * margin, 3 * margin, 10 * margin);
         
-        EG2envA.setBounds(24 * margin, 4 * margin, 3 * margin, 10 * margin);
-        EG2envD.setBounds(27 * margin, 4 * margin, 3 * margin, 10 * margin);
-        EG2envS.setBounds(30 * margin, 4 * margin, 3 * margin, 10 * margin);
-        EG2envR.setBounds(33 * margin, 4 * margin, 3 * margin, 10 * margin);
+        EG2envA.setBounds(23 * margin, 10 * margin, 3 * margin, 10 * margin);
+        EG2envD.setBounds(26 * margin, 10 * margin, 3 * margin, 10 * margin);
+        EG2envS.setBounds(29 * margin, 10 * margin, 3 * margin, 10 * margin);
+        EG2envR.setBounds(32 * margin, 10 * margin, 3 * margin, 10 * margin);
         
-        FILT1onOff.setBounds(40 * margin, (int)(1.5  * margin), 2.5 * margin, (int)(2.5 * margin));
-        Cutoff.setBounds    (40 * margin,          7 * margin , 7 * margin,            7 * margin);
-        Resonance.setBounds (48 * margin,          7 * margin , 7 * margin,            7 * margin);
-        EGfilt.setBounds    (56 * margin,          7 * margin , 7 * margin,            7 * margin);
+        FILT1onOff.setBounds(40 * margin,                margin, 2.5 * margin, (int)(2.5 * margin));
+        Cutoff.setBounds    (40 * margin,          4 * margin , 7 * margin,            7 * margin);
+        Resonance.setBounds (48 * margin,          4 * margin , 7 * margin,            7 * margin);
+        EGfilt.setBounds    (56 * margin,          4 * margin , 7 * margin,            7 * margin);
+        
+        Detune.setBounds    (40 * margin,          16 * margin , 7 * margin,            7 * margin);
+        CrossMod.setBounds    (49 * margin,          16 * margin , (int) (2.5 * margin),            (int) (2.5 * margin));
     }
     
     void paint (Graphics& g){
     
-        const int gmargin = 10;
+        const int gmargin = 11;
         g.fillAll (Colours::white);
         
-        g.setColour(juce::Colours::teal);
-        g.fillRect(0, 0, getWidth(), getHeight());
-        g.setColour(juce::Colours::white);
+        //g.setColour(juce::Colours::teal);
+        //g.fillRect(0, 0, getWidth(), getHeight());
+        
+        g.setColour(juce::Colours::lightgrey);
+        g.fillRect(0, 0, 8 * gmargin, getHeight());
+        
+        
+        //g.setColour(juce::Colours::blueviolet);
+        g.setFont(Font("OpenDyslexic", 80.0f, bold));
+        g.drawText("microSQU", 10 * gmargin, gmargin, 80*gmargin, 4*gmargin, true);
+        g.setFont(Font("OpenDyslexic", 14.0f, bold));
+        g.drawText("Nonlinear Instruments", getWidth()- (10 * gmargin), 2, 16 * gmargin, 4 * gmargin, true);
+        
+        g.setColour(juce::Colours::blueviolet);
         g.setFont(Font("OpenDyslexic", 20.0f, normal));
         
-        g.drawText("Master", (int)(1.5 * gmargin),  gmargin, 5 * gmargin , (int)(2.5 * gmargin), true);
+        g.drawText("MASTER", gmargin,  gmargin, 5 * gmargin , (int)(2.5 * gmargin), true);
+        g.drawText("VOLUME", (int)(1.5 * gmargin), 11 * gmargin, 5 * gmargin , (int)(2.5 * gmargin), true);
         
-        g.drawText("VOLUME", (int)(1.5 * gmargin), 14 * gmargin, 5 * gmargin , (int)(2.5 * gmargin), true);
+      
+        g.drawText("AMP EG", 10 * gmargin, 7  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
         
-        g.drawText("AMP EG", 10 * gmargin, 1  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+        g.drawText("EG 2", 23* gmargin, 7  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
         
-        g.drawText("EG 2", 24 * gmargin, 1  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
-        
-        g.drawText("FILTER", 44 * gmargin, 1  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+        g.drawText("FILTER", 44 * gmargin,      gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
        
         g.drawText("A",      11 * gmargin, 14 * gmargin, 3 * gmargin, (int)(2.5 * gmargin),true);
         g.drawText("D",      14 * gmargin, 14 * gmargin, 3 * gmargin, (int)(2.5 * gmargin),true);
@@ -241,9 +275,13 @@ public:
         g.drawText("S",      30 * gmargin, 14 * gmargin, 3 * gmargin, (int)(2.5 * gmargin),true);
         g.drawText("R",      33 * gmargin, 14 * gmargin, 3 * gmargin, (int)(2.5 * gmargin),true);
         
-         g.drawText("CUTOFF",41 * gmargin, 14  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
-         g.drawText("RES",   51 * gmargin, 14  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
-         g.drawText("EG->cutoff",   57 * gmargin, 14  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+         g.drawText("CUTOFF",41 * gmargin, 10  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+         g.drawText("RES",   50 * gmargin, 10  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+         g.drawText("EG2",   58 * gmargin, 10  * gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+        
+         g.drawText("OSC Detune", 40 * gmargin,    13 *  gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+        
+        g.drawText("Xmod", 49 * gmargin,    13 *  gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
     }
 
     //==========================================================================
@@ -306,6 +344,17 @@ public:
                 synth.getVoice(i)->controllerMoved(90, (int) ( FILT1engage ) );
             }
         }
+        else if (buttonThatWasClicked == &CrossMod)
+        {
+            const bool Xmod = static_cast<bool>(buttonThatWasClicked->getToggleState());
+            
+            if(Xmod){CrossMod.setButtonText ("O"); }
+            else{ CrossMod.setButtonText ("|");}
+            for (int i = 0; i < maxNumVoices; ++i)
+            {
+                synth.getVoice(i)->controllerMoved(81, (int) ( Xmod ) );
+            }
+        }
         
     }
     
@@ -343,6 +392,34 @@ public:
                 synth.getVoice(i)->controllerMoved(103, (int) AMPenvR.getValue());
             }
         }
+        else if  (slider == &EG2envA)
+        {
+            for (int i = 0; i < maxNumVoices; ++i)
+            {
+                synth.getVoice(i)->controllerMoved(104, (int) EG2envA.getValue());
+            }
+        }
+        else if  (slider == &EG2envD)
+        {
+            for (int i = 0; i < maxNumVoices; ++i)
+            {
+                synth.getVoice(i)->controllerMoved(105, (int) EG2envD.getValue());
+            }
+        }
+        else if  (slider == &EG2envS)
+        {
+            for (int i = 0; i < maxNumVoices; ++i)
+            {
+                synth.getVoice(i)->controllerMoved(106, (int) EG2envS.getValue());
+            }
+        }
+        else if  (slider == &EG2envR)
+        {
+            for (int i = 0; i < maxNumVoices; ++i)
+            {
+                synth.getVoice(i)->controllerMoved(107, (int) EG2envR.getValue());
+            }
+        }
         else if  (slider == &Cutoff)
         {
             for (int i = 0; i < maxNumVoices; ++i)
@@ -364,6 +441,13 @@ public:
                 synth.getVoice(i)->controllerMoved(93, (int) EGfilt.getValue());
             }
         }
+        else if  (slider == &Detune)
+        {
+            for (int i = 0; i < maxNumVoices; ++i)
+            {
+                synth.getVoice(i)->controllerMoved(80, (int) Detune.getValue());
+            }
+        }
     }
     
     
@@ -377,7 +461,7 @@ private:
     MidiKeyboardComponent midiKeyboardComponent;
     const int maxNumVoices = 16;
     
-    TextButton onOffButton, FILT1onOff ;
+    TextButton onOffButton, FILT1onOff, CrossMod ;
     bool masterPower, FILT1engage;
     Slider
     masterVolume,
@@ -391,7 +475,8 @@ private:
     EG2envR,
     Cutoff,
     Resonance,
-    EGfilt
+    EGfilt,
+    Detune
     ;
     double masterVolumeFactor;
     
