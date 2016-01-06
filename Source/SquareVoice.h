@@ -206,6 +206,7 @@ private:
     oscSQU square, square2, square3, square4;
     ADSRenv AMPenv, EG2;
     filter1 FILT1;
+    distorsion DIST;
 
 };
     

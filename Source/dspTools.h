@@ -245,7 +245,7 @@ class Mix2
 public:
     Mix2(){input1 = new float[2];input2 = new float[2];attenuator=.5f;input1[0]=input2[0]=0.;input1[1]=input2[1]=0.;};
     ~Mix2(){delete input1,input2;};
-    float setAttenuator(float _value){attenuator= _value;}; // _value range 0. ~ 1.
+    void setAttenuator(float _value){attenuator= _value;}; // _value range 0. ~ 1.
     float* mix2(float* _input1, float* _input2){input1=_input1;input2=_input2;output[0]=(input1[0]+input2[0])*attenuator;(output[1]=input1[1]+input2[1])*attenuator;return (output);};
 };
 
@@ -269,7 +269,7 @@ public:
         output=new float[2];
     };
     ~Mix6(){delete input1,input2,input3,input4,input5,input6,output;};
-    float setAttenuator(float _value){attenuator= _value;}; // _value range 0. ~ 1.
+    void setAttenuator(float _value){attenuator= _value;}; // _value range 0. ~ 1.
     float* mix6(float* _input1, float* _input2,float* _input3, float* _input4,float* _input5, float* _input6)
     {
         input1=_input1;input2=_input2;input3=_input3;input4=_input4;input5=_input5;input6=_input6;
