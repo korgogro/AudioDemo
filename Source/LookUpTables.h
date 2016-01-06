@@ -47,6 +47,19 @@ public:
     double cosBuf512 ( int idx ){
         return cosineBuffer[ idx ];
     }
+    double arcSinBuf512 ( int idx ){
+        return arcsinBuffer [ idx ];
+    }
+    
+    double arcSinXBuf512 ( int idx ){
+        return arcsinXBuffer [ idx ];
+    }
+    double arcSinXXBuf512 ( int idx ){
+        return arcsinXXBuffer [ idx ];
+    }
+    double PInValue1024 ( int idx){
+        return PInValue [ idx];
+    }
     
 private :
 //this is a 514-point sinewave table that has many uses.

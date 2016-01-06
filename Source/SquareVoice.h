@@ -13,7 +13,7 @@
 #ifndef SQUAREVOICE_H_INCLUDED
 #define SQUAREVOICE_H_INCLUDED
 
-
+#include "DISTorsion.h"
 #include "dspTools.h"
 #include "LookUpTables.h"
 #include "filter1.h"
@@ -49,7 +49,7 @@ public:
         AMPenv.setSampleRate(samplingRate);
         EG2.setSampleRate(samplingRate);
         FILT1.setSamplingRate(samplingRate);
-        detuneOsc1 = detuneOsc2 = 1.;
+        detuneOsc1 = detuneOsc2 = detuneOsc3 = detuneOsc4 = 0.;
         XmodEngaged = false;
     }
     
@@ -69,6 +69,9 @@ public:
         
         square.setFrequency ( noteFreqHz + ( detuneOsc1 * ( noteFreqHz - note2FreqHz ) ));
         square2.setFrequency( noteFreqHz + ( detuneOsc2 * ( noteFreqHz - note2FreqHz ) ));
+        square3.setFrequency( noteFreqHz + ( detuneOsc3 * ( noteFreqHz - note2FreqHz ) ));
+        square4.setFrequency( noteFreqHz + ( detuneOsc4 * ( noteFreqHz - note2FreqHz ) ));
+
         AMPenv.triggerOn();
         EG2.triggerOn();
     }
@@ -151,8 +154,11 @@ public:
             {
                 FILT1.patchCutoffModSignal(  EG2.getCurve() );
                 
-                double oscsOut = ( square.getSignal() + square2.getSignal() ) / 2.;
-                if(XmodEngaged){ oscsOut = ( square.getSignal() * square2.getSignal() ) / 2.; };
+                double oscsOut = ( square.getSignal() + square2.getSignal() + square3.getSignal() + square4.getSignal() ) / 4.;
+                
+                if(XmodEngaged){
+                       oscsOut = square.getSignal() * square2.getSignal() * square3.getSignal() * square4.getSignal();
+                }
                 
                 // const FloatType currentSample = static_cast<FloatType> (std::sin (currentAngle) * level * tailOff);
                 const float currentSample = (float) (
@@ -183,6 +189,8 @@ public:
     void setDetune(int _detune){
         detuneOsc1 = (double) ( _detune / 127. );
         detuneOsc2 = detuneOsc1 * ( -1. );
+        detuneOsc3 = detuneOsc1 / 2.;
+        detuneOsc4 = detuneOsc2 / 2.;
     }
     
     void setXmod ( bool _Xmod){
@@ -193,9 +201,9 @@ public:
  
 private:
     
-    double level, samplingRate, detuneOsc1, detuneOsc2;
+    double level, samplingRate, detuneOsc1, detuneOsc2, detuneOsc3, detuneOsc4;
     bool XmodEngaged;
-    oscSQU square, square2;
+    oscSQU square, square2, square3, square4;
     ADSRenv AMPenv, EG2;
     filter1 FILT1;
 

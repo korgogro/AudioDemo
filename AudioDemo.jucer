@@ -7,6 +7,7 @@
   <MAINGROUP id="bWlEIg" name="AudioDemo">
     <GROUP id="{2597D3CD-3356-D9CC-8F9C-37033002CD6F}" name="Source">
       <FILE id="BJRv7e" name="ADSRenv.h" compile="0" resource="0" file="Source/ADSRenv.h"/>
+      <FILE id="OVYk89" name="DISTorsion.h" compile="0" resource="0" file="Source/DISTorsion.h"/>
       <FILE id="D4JkXk" name="dspTools.h" compile="0" resource="0" file="Source/dspTools.h"/>
       <FILE id="XieIsS" name="filter1.h" compile="0" resource="0" file="Source/filter1.h"/>
       <FILE id="V1aWZq" name="LookUpTables.h" compile="0" resource="0" file="Source/LookUpTables.h"/>

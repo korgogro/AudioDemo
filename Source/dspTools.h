@@ -157,24 +157,20 @@ class DCremoval{
      output(t) = (input(t)-pos)
      */
     
-    float* pos;
-    float* speed;
-    float* output;
-    float* input;
+    double pos;
+    double speed;
+    double output;
+    double input;
     
 public:
-    DCremoval(){output = new float[2];input= new float[2];speed=new float[2];pos=new float[2];speed[0]=speed[1]=pos[0]=pos[1]=0.;};
-    ~DCremoval(){delete output, input, speed, pos;};
-    float* removeDC (float* _input){
+    DCremoval(){output = input = speed= pos==0.;};
+    ~DCremoval(){};
+    double removeDC (double _input){
         input= _input;
-        speed[0] = speed[0] + (input[0] - pos[0]) * 0.000004567;
-        speed[1] = speed[1] + (input[1] - pos[1]) * 0.000004567;
-        pos[0]=pos[0]+speed[0];
-        pos[1]=pos[1]+speed[1];
-        speed[0]*=.96;
-        speed[1]*=.96;
-        output[0]=input[0]-pos[0];
-        output[1]=input[1]-pos[1];
+        speed = speed + (input - pos) * 0.000004567;
+        pos=pos+speed;
+        speed*=.96;
+        output=input-pos;
         return (output);
     };
     
@@ -184,14 +180,14 @@ class ParamSmooth
 {
     // 3 step average : this is an empirical aproach
     
-    float smoothed, x1, x2, /* x3, x4, x5, x6, */ new_value;
+    double smoothed, x1, x2, /* x3, x4, x5, x6, */ new_value;
     
 public:
     ParamSmooth(){ smoothed=x1=x2=new_value=1.;};
     ~ParamSmooth(){};
     
-    void setNewValue(float _new_value) { new_value= _new_value; x1=x2; x2=smoothed; };
-    float getValue() { smoothed=(x1+x2+new_value)/3.; x1=x2; x2=new_value; return smoothed;};
+    void setNewValue(double _new_value) { new_value= _new_value; x1=x2; x2=smoothed; };
+    double getValue() { smoothed=(x1+x2+new_value)/3.; x1=x2; x2=new_value; return smoothed;};
     
     /*// 7 step average :
      ParamSmooth::ParamSmooth() { smoothed=x1=x2=x3=x4=x5=x6=new_value=1.;}; ParamSmooth::~ParamSmooth(){};
