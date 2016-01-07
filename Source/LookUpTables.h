@@ -40,24 +40,36 @@ public:
     LookUpTable(){};
     ~LookUpTable(){};
     
-    double sinBuf512 ( int idx ){
+    double sinBuf512 ( int _idx ){
+        int idx = _idx;
+        if(idx>514)idx-=514;
         return sineBuffer[ idx ];
     }
     
-    double cosBuf512 ( int idx ){
+    double cosBuf512 ( int _idx ){
+        int idx = _idx;
+        if(idx>514)idx-=514;
         return cosineBuffer[ idx ];
     }
-    double arcSinBuf512 ( int idx ){
+    double arcSinBuf512 ( int _idx ){
+        int idx = _idx;
+        if(idx>514)idx-=514;
         return arcsinBuffer [ idx ];
     }
     
-    double arcSinXBuf512 ( int idx ){
+    double arcSinXBuf512 ( int _idx ){
+        int idx = _idx;
+        if(idx>514)idx-=514;
         return arcsinXBuffer [ idx ];
     }
-    double arcSinXXBuf512 ( int idx ){
+    double arcSinXXBuf512 ( int _idx ){
+        int idx = _idx;
+        if(idx>514)idx-=514;
         return arcsinXXBuffer [ idx ];
     }
-    double PInValue1024 ( int idx){
+    double PInValue1024 ( int _idx){
+        int idx = _idx;
+        if(idx>1024)idx-=1024;
         return PInValue [ idx];
     }
     

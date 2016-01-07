@@ -14,6 +14,7 @@
       <FILE id="AwVFJl" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="ctHf0o" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
       <FILE id="AB5Z5R" name="Oscilloscope.h" compile="0" resource="0" file="Source/Oscilloscope.h"/>
+      <FILE id="jchxYV" name="oscSAW.h" compile="0" resource="0" file="Source/oscSAW.h"/>
       <FILE id="jsK4bL" name="oscSQU.h" compile="0" resource="0" file="Source/oscSQU.h"/>
       <FILE id="YT3Skr" name="SquareVoice.h" compile="0" resource="0" file="Source/SquareVoice.h"/>
     </GROUP>

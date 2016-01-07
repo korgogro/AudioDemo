@@ -17,6 +17,7 @@
 #include "dspTools.h"
 #include "LookUpTables.h"
 #include "filter1.h"
+#include "oscSAW.h"
 #include "oscSQU.h"
 #include "ADSRenv.h"
 
@@ -171,11 +172,11 @@ public:
                        oscsOut = square.getSignal() * square2.getSignal() * square3.getSignal() * square4.getSignal();
                 }
                 
-                 double distOut = DIST.getAudioOut(oscsOut);
+                // double distOut = DIST.getAudioOut(oscsOut);
                 
                 // const FloatType currentSample = static_cast<FloatType> (std::sin (currentAngle) * level * tailOff);
                 const double currentSample = (double) (
-                                                       FILT1.getAudioOut ( distOut )
+                                                       FILT1.getAudioOut ( oscsOut )
                                                               *
                                                             level
                                                               *
@@ -220,6 +221,7 @@ private:
     const double voiceAtenuator = 0.6;
     bool XmodEngaged;
     oscSQU square, square2, square3, square4;
+    //oscSAW square, square2, square3, square4;
     ADSRenv AMPenv, EG2;
     filter1 FILT1;
     distorsion DIST;

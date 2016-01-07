@@ -191,7 +191,9 @@ public:
         Detune.setValue (1., dontSendNotification);
         Detune.addListener (this);
         
-        // DISTORSION =============================================== //
+       
+        /*
+         // DISTORSION =============================================== //
         
         addAndMakeVisible (DistOnOff);
         DistOnOff.setClickingTogglesState(true);
@@ -204,9 +206,9 @@ public:
         addAndMakeVisible (DistLevel);
         DistLevel.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
         DistLevel.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
-        DistLevel.setRange (0., 100.);
+        DistLevel.setRange (1., 100.);
         //      DistLevel.setSkewFactorFromMidPoint (16.);
-        DistLevel.setValue (10., dontSendNotification);
+        DistLevel.setValue (4., dontSendNotification);
         DistLevel.addListener (this);
         
         addAndMakeVisible (DistGain);
@@ -214,8 +216,9 @@ public:
         DistGain.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
         DistGain.setRange (0., 127.0);
         //DistGain.setSkewFactorFromMidPoint (16.);
-        DistGain.setValue (10., dontSendNotification);
+        DistGain.setValue (100., dontSendNotification);
         DistGain.addListener (this);
+         */
         
         
         
@@ -258,10 +261,11 @@ public:
         
         Detune.setBounds    (40 * margin,          16 * margin , 7 * margin,            7 * margin);
         CrossMod.setBounds    (49 * margin,          16 * margin , (int) (2.5 * margin),            (int) (2.5 * margin));
-       
+       /*
         DistOnOff.setBounds ( 56 * margin, 14 * margin, (int)(2.5 * margin), (int(2.5 * margin)));
         DistLevel.setBounds ( 56  *margin,   18 * margin,          5 * margin,           5* margin);
         DistGain.setBounds  ( 62  *margin,   18 * margin,          5 * margin,           5* margin);
+        */
         
     }
     
@@ -313,10 +317,11 @@ public:
          g.drawText("OSC Detune", 40 * gmargin,    13 *  gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
         
         g.drawText("Xmod", 49 * gmargin,    13 *  gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
-        
+       /*
          g.drawText("Distorsion", 59 * gmargin,    14 *  gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
         g.drawText("Level", 57 * gmargin,    16 *  gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
          g.drawText("Gain", 62 * gmargin,    16 *  gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+        */
     }
 
     //==========================================================================
@@ -390,6 +395,7 @@ public:
                 synth.getVoice(i)->controllerMoved(81, (int) ( Xmod ) );
             }
         }
+       /*
         else if (buttonThatWasClicked == &DistOnOff)
         {
             const bool DistSwitch = static_cast<bool>(buttonThatWasClicked->getToggleState());
@@ -401,6 +407,7 @@ public:
                 synth.getVoice(i)->controllerMoved(70, (int) ( DistSwitch ) );
             }
         }
+        */
         
     }
     
@@ -494,6 +501,7 @@ public:
                 synth.getVoice(i)->controllerMoved(80, (int) Detune.getValue());
             }
         }
+        /*
         else if  (slider == &DistLevel)
         {
             for (int i = 0; i < maxNumVoices; ++i)
@@ -508,6 +516,7 @@ public:
                 synth.getVoice(i)->controllerMoved(72, (int) DistGain.getValue());
             }
         }
+         */
     }
     
     
