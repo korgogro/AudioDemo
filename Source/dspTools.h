@@ -180,19 +180,20 @@ class ParamSmooth
 {
     // 3 step average : this is an empirical aproach
     
-    double smoothed, x1, x2, /* x3, x4, x5, x6, */ new_value;
+    double smoothed, x1, x2,  x3, x4, x5, x6,  new_value;
     
 public:
-    ParamSmooth(){ smoothed=x1=x2=new_value=1.;};
+   // ParamSmooth(){ smoothed=x1=x2=new_value=1.;};
+    //~ParamSmooth(){};
+    
+   // void setNewValue(double _new_value) { new_value= _new_value; x1=x2; x2=smoothed; };
+   // double getValue() { smoothed=(x1+x2+new_value)/3.; x1=x2; x2=new_value; return smoothed;};
+    
+    // 7 step average :
+    ParamSmooth() { smoothed=x1=x2=x3=x4=x5=x6=new_value=1.;};
     ~ParamSmooth(){};
-    
-    void setNewValue(double _new_value) { new_value= _new_value; x1=x2; x2=smoothed; };
-    double getValue() { smoothed=(x1+x2+new_value)/3.; x1=x2; x2=new_value; return smoothed;};
-    
-    /*// 7 step average :
-     ParamSmooth::ParamSmooth() { smoothed=x1=x2=x3=x4=x5=x6=new_value=1.;}; ParamSmooth::~ParamSmooth(){};
-     void ParamSmooth::setNewValue(float _newvalue) { new_value= _newvalue; x1=x2; x2=x3; x3=x4; x4=x5; x5=x6; x6=smoothed; };
-     float ParamSmooth::getValue(){ smoothed=(x1+x2+x3+x4+x5+x6+new_value)/7.; x1=x2; x2=x3; x3=x4; x4=x5; x5=x6; x6=new_value; return smoothed;};*/
+     void setNewValue(double _newvalue) { new_value= _newvalue; x1=x2; x2=x3; x3=x4; x4=x5; x5=x6; x6=smoothed; };
+     double getValue(){ smoothed=(x1+x2+x3+x4+x5+x6+new_value)/7.; x1=x2; x2=x3; x3=x4; x4=x5; x5=x6; x6=new_value; return smoothed;};
 };
 
 class SignalClamper

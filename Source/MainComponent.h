@@ -191,6 +191,32 @@ public:
         Detune.setValue (1., dontSendNotification);
         Detune.addListener (this);
         
+        // DISTORSION =============================================== //
+        
+        addAndMakeVisible (DistOnOff);
+        DistOnOff.setClickingTogglesState(true);
+        DistOnOff.setToggleState(false, dontSendNotification);
+        DistOnOff.setButtonText ("|");
+        DistOnOff.addListener(this);
+        //DistOnOff.addShortcut(KeyPress(juce::KeyPress::spaceKey));
+        
+        
+        addAndMakeVisible (DistLevel);
+        DistLevel.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+        DistLevel.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
+        DistLevel.setRange (0., 100.);
+        //      DistLevel.setSkewFactorFromMidPoint (16.);
+        DistLevel.setValue (10., dontSendNotification);
+        DistLevel.addListener (this);
+        
+        addAndMakeVisible (DistGain);
+        DistGain.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+        DistGain.setTextBoxStyle(Slider::NoTextBox, true, 1, 1);
+        DistGain.setRange (0., 127.0);
+        //DistGain.setSkewFactorFromMidPoint (16.);
+        DistGain.setValue (10., dontSendNotification);
+        DistGain.addListener (this);
+        
         
         
         setSize (750, 375);
@@ -232,6 +258,11 @@ public:
         
         Detune.setBounds    (40 * margin,          16 * margin , 7 * margin,            7 * margin);
         CrossMod.setBounds    (49 * margin,          16 * margin , (int) (2.5 * margin),            (int) (2.5 * margin));
+       
+        DistOnOff.setBounds ( 56 * margin, 14 * margin, (int)(2.5 * margin), (int(2.5 * margin)));
+        DistLevel.setBounds ( 56  *margin,   18 * margin,          5 * margin,           5* margin);
+        DistGain.setBounds  ( 62  *margin,   18 * margin,          5 * margin,           5* margin);
+        
     }
     
     void paint (Graphics& g){
@@ -282,6 +313,10 @@ public:
          g.drawText("OSC Detune", 40 * gmargin,    13 *  gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
         
         g.drawText("Xmod", 49 * gmargin,    13 *  gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+        
+         g.drawText("Distorsion", 59 * gmargin,    14 *  gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+        g.drawText("Level", 57 * gmargin,    16 *  gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
+         g.drawText("Gain", 62 * gmargin,    16 *  gmargin, 7 * gmargin, (int)(2.5 * gmargin),true);
     }
 
     //==========================================================================
@@ -353,6 +388,17 @@ public:
             for (int i = 0; i < maxNumVoices; ++i)
             {
                 synth.getVoice(i)->controllerMoved(81, (int) ( Xmod ) );
+            }
+        }
+        else if (buttonThatWasClicked == &DistOnOff)
+        {
+            const bool DistSwitch = static_cast<bool>(buttonThatWasClicked->getToggleState());
+            
+            if(DistSwitch){DistOnOff.setButtonText ("O"); }
+            else{ DistOnOff.setButtonText ("|");}
+            for (int i = 0; i < maxNumVoices; ++i)
+            {
+                synth.getVoice(i)->controllerMoved(70, (int) ( DistSwitch ) );
             }
         }
         
@@ -448,6 +494,20 @@ public:
                 synth.getVoice(i)->controllerMoved(80, (int) Detune.getValue());
             }
         }
+        else if  (slider == &DistLevel)
+        {
+            for (int i = 0; i < maxNumVoices; ++i)
+            {
+                synth.getVoice(i)->controllerMoved(71, (int) DistLevel.getValue());
+            }
+        }
+        else if  (slider == &DistGain)
+        {
+            for (int i = 0; i < maxNumVoices; ++i)
+            {
+                synth.getVoice(i)->controllerMoved(72, (int) DistGain.getValue());
+            }
+        }
     }
     
     
@@ -460,8 +520,9 @@ private:
     MidiKeyboardState midiKeyboardState;
     MidiKeyboardComponent midiKeyboardComponent;
     const int maxNumVoices = 16;
+   
     
-    TextButton onOffButton, FILT1onOff, CrossMod ;
+    TextButton onOffButton, FILT1onOff, CrossMod, DistOnOff ;
     bool masterPower, FILT1engage;
     Slider
     masterVolume,
@@ -476,7 +537,9 @@ private:
     Cutoff,
     Resonance,
     EGfilt,
-    Detune
+    Detune,
+    DistLevel,
+    DistGain
     ;
     double masterVolumeFactor;
     

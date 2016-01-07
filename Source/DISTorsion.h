@@ -28,14 +28,14 @@ class distorsion {
         LevelStage= 1.;
         smoothGain.setNewValue(0.);
         isPlayingDistor=false;
-        distorMode=1;
+        distorMode=0;
         
 
     };
 
     ~distorsion(){};
     
-    void    setGain(float _gain);
+    void    setGain(double _gain){smoothGain.setNewValue(_gain);};
     
     double   getGain(){return smoothGain.getValue();};
     
@@ -52,6 +52,7 @@ class distorsion {
     void    setDistorMode ( int _distorMode){distorMode=_distorMode;};
     
     double getAudioOut(double audioIN){
+        
         declicked_Distor=declickDistor.ar();
         smoothedGain=smoothGain.getValue();
         
@@ -66,15 +67,14 @@ class distorsion {
         if ( readIdx1>=511 ) readIdx1 -=512; // make it warp arround
         idxremainder1 = readIdx1 - floor(readIdx1); // see where it falls in between
         
-        if(distorMode==2){
-            phase=(double)((1-idxremainder1) * table.arcSinXXBuf512(1+ (long) readIdx1) + idxremainder1 * table.arcSinXXBuf512(2+(long) readIdx1)); //compute the linear interpolation
-        } else if(distorMode==1){
-            phase=(double)((1-idxremainder1) * table.arcSinXBuf512(1+ (long) readIdx1) + idxremainder1 * table.arcSinXBuf512(2+(long) readIdx1)); //compute the linear interpolation
+        if(distorMode==3){
+            phase=(double)((1-idxremainder1) * table.arcSinXXBuf512(1+ readIdx1) + idxremainder1 * table.arcSinXXBuf512(2 + readIdx1)); //compute the linear interpolation
+        } else if(distorMode==2){
+            phase=(double)((1-idxremainder1) * table.arcSinXBuf512(1+  readIdx1) + idxremainder1 * table.arcSinXBuf512(2+ readIdx1)); //compute the linear interpolation
         }
         else{
-            phase=(double)((1-idxremainder1) * table.arcSinBuf512(1+ (long) readIdx1) + idxremainder1 * table.arcSinBuf512(2+(long) readIdx1)); //compute the linear interpolation
+            phase=(double)((1-idxremainder1) * table.arcSinBuf512(1+  readIdx1) + idxremainder1 * table.arcSinBuf512(2+ readIdx1)); //compute the linear interpolation
         }
-        
        
         /*==== END interpolated lookup arcsin ==*/
         
@@ -94,16 +94,17 @@ class distorsion {
                 
                 idxremainder3 = readIdx3 - floor(readIdx3);
                 
-                distortedOut+=float((2./(table.PInValue1024(n)))* (float)((1-idxremainder3) * table.sinBuf512(1+ (long) readIdx3) + idxremainder3 * table.sinBuf512(2+(long) readIdx3)));
+                distortedOut+=double((2./(table.PInValue1024(n)))* (double)((1-idxremainder3) * table.sinBuf512(1+  readIdx3) + idxremainder3 * table.sinBuf512(2+ readIdx3)));
                 
             }
             
            double AudioOut=(declicked_Distor*smoothedGain*distortedOut)  +  ((1.f-declicked_Distor)*audioIN);
-           AudioOut=DCremover.removeDC(AudioOut);
+           
+           AudioOut=DCremover.removeDC(AudioOut) * .5 ;
             
-            distortedOut=0.f;
+           distortedOut=0.f;
             
-            return AudioOut;
+           return AudioOut;
             
         }
         else if (declicked_Distor==0. )

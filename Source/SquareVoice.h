@@ -141,6 +141,17 @@ public:
             case 81:
                 this->setXmod((bool)( _CV_));
                 
+                // DIST
+            case 70 :
+                DIST.setPlay((bool) ( _CV_ ));
+                break;
+            case 71:
+                DIST.setLevel( (int) ( _CV_ ) ); // warning here !!
+                break;
+            case 72 :
+                DIST.setGain( (double) ( _CV_ / 127.) );
+                break;
+                
             default :
                 break;
         }
@@ -160,13 +171,17 @@ public:
                        oscsOut = square.getSignal() * square2.getSignal() * square3.getSignal() * square4.getSignal();
                 }
                 
+                 double distOut = DIST.getAudioOut(oscsOut);
+                
                 // const FloatType currentSample = static_cast<FloatType> (std::sin (currentAngle) * level * tailOff);
-                const float currentSample = (float) (
-                                                       FILT1.getAudioOut ( oscsOut )
+                const double currentSample = (double) (
+                                                       FILT1.getAudioOut ( distOut )
                                                               *
                                                             level
                                                               *
                                                         AMPenv.getCurve()
+                                                              *
+                                                          voiceAtenuator
                                                      
                                                         );
                 
@@ -202,6 +217,7 @@ public:
 private:
     
     double level, samplingRate, detuneOsc1, detuneOsc2, detuneOsc3, detuneOsc4;
+    const double voiceAtenuator = 0.6;
     bool XmodEngaged;
     oscSQU square, square2, square3, square4;
     ADSRenv AMPenv, EG2;
