@@ -5,7 +5,7 @@
     Created: 5 Jan 2016 5:50:29pm
     Author:  ignasi
 //
-//  Direct form implementation of :
+//  Direct form implementation of Stephen G. McGovern's algorithm for Guitar Distortion :
 //  http://sgm-audio.com/research/dist/dist.html
 //
 //
