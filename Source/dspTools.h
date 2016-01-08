@@ -377,7 +377,42 @@ inline float ThirdInterp( float x, float L1, float L0, float H0, float H1)
 /* ============================================================================================= */
 /* ============================================================================================= */
 
+/*
+ // for pow(x,n) calculation/approximation
+ //
+ // where n=0,1....N (could be up to 2000)
+ // and x is float within (-1;1) range ?
+ 
+ // You could try the ol'good algorithm :
+ 
+ float ipow (float x, long n)
+ {
+ const int   org_n = n;
+ if (n < 0)
+ {
+ n = -n;
+ }
+ 
+ float   z = 1;
+ while (n != 0)
+ {
+ if ((n & 1) != 0)
+ {
+ z *= x;
+ }
+ n >>= 1;
+ x *= x;
+ }
+ 
+ return ((org_n < 0) ? 1.0f / z : z);
+ }
+ 
+ // It may be faster than the pow() function which actually
+ // uses log() + exp(). You can also try to approximate pow()
+ // with fast log2() and exp2() approximations (google search
+ // for them).
 
+ */
 
 
 #endif  // DSPTOOLS_H_INCLUDED

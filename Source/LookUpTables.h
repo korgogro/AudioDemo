@@ -14,20 +14,29 @@
  // this will deliver a list of 514 values ...
  // a complete cycle is done in 512 and two extra samples are inserted at the end for interpolation by indexes
  
- double value = 0.f;
- double increment = 0.f;
- double dif = 1./512.;
- double PI = 3.1415926535897932384626433832795;
+ #include <iostream>
+ #include <iomanip>
+ #include "Math.h"
  
- for(int i = 1; i<=514; i++)
+ using namespace std;
+ int main(int argc, char *argv[]) {
+	
+	double value = 0.f;
+	double increment = 0.f;
+	double dif = 1./65534.;
+	double PI = 3.1415926535897932384626433832795;
+ 
+	for (int i = 1; i<=65536; i++)
  {
  
  value= cos(2* PI * increment);
  increment += dif;
  
  // output :
- cout << value;
+ cout << std::setprecision(32) << value;
  cout << "\r";
+ }
+	
  }
  
  
