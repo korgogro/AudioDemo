@@ -34,7 +34,7 @@ public :
         resonance=QFACTOR=1.;
         x1=y1=z1=c1=x2=y2=z2=c2=r1=r2=0.;
         
-        AudioOut = 0.;
+      //  AudioOut = 0.;
         
         isPlaying=true;
     };
@@ -114,10 +114,10 @@ double getAudioOut(double _input){
         x1=x1+(AudioIn-y1)*c1;
         y1=y1+x1;
         x1=x1*r1;
-        AudioOut=(-y1);
+       // AudioOut=(-y1);
 
         /* crossfade  */
-        AudioOut = AudioIn * (1.-declicker) + AudioOut * declicker;
+        double const AudioOut = AudioIn * (1.-declicker) + (-1) * y1 * declicker;
         
         return AudioOut;
     }
@@ -125,8 +125,7 @@ double getAudioOut(double _input){
 private:
 
     double exp_freq, freq_max, ln_freq_max, freq_min, ln_freq_min, resonance;
-    double AudioOut;
-    double CUTOFF, QFACTOR;
+   double CUTOFF, QFACTOR;
     LookUpTable table;
 
     bool isPlaying;
